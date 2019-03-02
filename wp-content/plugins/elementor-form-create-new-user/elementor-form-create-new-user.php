@@ -29,4 +29,15 @@ function thewpchannel_elementor_form_create_new_user($record,$ajax_handler)
     $first_name=$form_data["First Name"]; //Get tne value of the input with the label "First Name"
     $last_name=$form_data["Last Name"]; //Get tne value of the input with the label "Last Name"
     wp_update_user(array("ID"=>$user,"first_name"=>$first_name,"last_name"=>$last_name)); // Update the user with the first name and last name
+
+
+    /* Automatically log in the user and redirect the user to the home page */
+    $creds= array( // credientials for newley created user
+        "user_login"=>$username,
+        "user_password"=>$password,
+        "remember"=>true
+    );
+    $signon = wp_signon($creds); //sign in the new user
+    if ($signon)
+        $ajax_handler->add_response_data( 'redirect_url', get_home_url() ); // optinal - if sign on succsfully - redierct the user to the home page
 }
